@@ -71,12 +71,10 @@ df_filtered['age_bp_interaction'] = df_filtered['age'] * (df_filtered['ap_lo'] +
 # Combine cholesterol and glucose into a metabolic score
 df_filtered['metabolic_score'] = df_filtered['cholesterol'] + df_filtered['gluc']
 
+# # # List of columns to plot
+# columns = ['height_m', 'weight', 'ap_hi', 'ap_lo']
 
-
-# # List of columns to plot
-# columns = ['height', 'weight', 'ap_hi', 'ap_lo']
-
-# Print summary statistics
+# # Print summary statistics
 # for column in columns:
 #     print(f"\n{column}:")
 #     print("Original data:")
@@ -115,13 +113,6 @@ params = {
     'objective': 'binary',
     'random_state': 42,
     'metric': 'binary_logloss',
-    # Fine-tuning parameters (currently commented out for initial testing)
-    # 'learning_rate': 0.05,       # Controls the step size at each iteration
-    # 'num_leaves': 31,            # Controls the complexity of the model
-    # 'max_depth': -1,             # Maximum depth of trees; -1 means no limit
-    # 'feature_fraction': 0.8,     # Fraction of features to consider per iteration
-    # 'bagging_fraction': 0.8,     # Subsampling ratio for training data
-    # 'bagging_freq': 5            # Frequency for bagging
 }
 
 # Train the model with early stopping using callbacks
