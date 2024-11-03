@@ -58,17 +58,23 @@ df_filtered['BMI'] = df_filtered['weight'] / (df_filtered['height_m'] ** 2)
 # Calculate Pulse Pressure: as its correlated to 
 df_filtered['pulse_pressure'] = df_filtered['ap_hi'] - df_filtered['ap_lo']
 
+# Lifestyle connections
+df_filtered['lifestyle_score'] = (
+    df_filtered['smoke'] + 
+    df_filtered['alco'] + 
+    (df_filtered['active'] == 0).astype(int)
+)
+
+# Age and blood pressure interaction
+df_filtered['age_bp_interaction'] = df_filtered['age'] * (df_filtered['ap_lo'] + ((1/3)*(df_filtered['ap_hi']-df_filtered['ap_lo'])))
+
+# Combine cholesterol and glucose into a metabolic score
+df_filtered['metabolic_score'] = df_filtered['cholesterol'] + df_filtered['gluc']
 
 
-#Dropping weight column as it doesn't make sense to have weight alone it needs to be related to height
-df_filtered = df_filtered.drop(columns=['weight', 'height_m'])
-
-# Check the min and max values for verification
-# print("Diastolic min and max:", df_filtered['ap_lo'].min(), df_filtered['ap_lo'].max())
-# print("Systolic min and max:", df_filtered['ap_hi'].min(), df_filtered['ap_hi'].max())
 
 # # List of columns to plot
-columns = ['height', 'weight', 'ap_hi', 'ap_lo']
+# columns = ['height', 'weight', 'ap_hi', 'ap_lo']
 
 # Print summary statistics
 # for column in columns:
@@ -140,3 +146,5 @@ accuracy = accuracy_score(y_test, y_pred_binary)
 print(f"Accuracy: {accuracy:.4f}")
 
 
+lgb.plot_importance(model, importance_type='split', title='Feature Importance', xlabel='Importance Score', ylabel='Features')
+plt.show()
