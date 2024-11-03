@@ -11,19 +11,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Load data
 data = pd.read_csv('cardio_train.csv', delimiter=';')
-data['age_years'] = data['age']//365 #to convert days to age
+data['age_years'] = data['age']//365 
 
-# Select features and target
 
 features = ['age_years', 'gender', 'height', 'weight', 'ap_hi', 'ap_lo', 'cholesterol', 'gluc', 'smoke', 'alco', 'active']
 target = 'cardio'
 
-# Split the data
+
 X_train, X_test, y_train, y_test = train_test_split(data[features], data[target], test_size=0.2, random_state=30)
 
-# Initialize models
+
 models = {
     'Random Forest': RandomForestClassifier(random_state=30),
     'Gradient Boosting': GradientBoostingClassifier(random_state=30),
@@ -34,8 +32,7 @@ models = {
     'SVM': SVC(random_state=30)
 }
 
-# Train and evaluate models
-
+accuracies = {}
 
 for name, model in models.items():
     model.fit(X_train, y_train)
@@ -43,6 +40,19 @@ for name, model in models.items():
     print(f'{name} Model')
     print(y_pred)
     print('Accuracy:', accuracy_score(y_test, y_pred))
+    accuracies[name] = accuracy_score(y_test, y_pred)
     print(classification_report(y_test, y_pred))
     print('-' * 60)
+
+
+sorted_accuracies = sorted(accuracies.items(), key=lambda item: item[1], reverse=True)
+model_names = [item[0] for item in sorted_accuracies]
+accuracy_values = [item[1] for item in sorted_accuracies]
+
+plt.figure(figsize=(12, 8))
+sns.barplot(x=accuracy_values, y=model_names, palette='viridis')
+plt.title('Model Accuracy Comparison')
+plt.xlabel('Accuracy')
+plt.ylabel('Model')
+plt.show()
 
