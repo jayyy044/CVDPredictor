@@ -21,9 +21,8 @@ features = ['age_years', 'gender', 'height', 'weight', 'ap_hi', 'ap_lo', 'choles
 target = 'cardio'
 
 # Split the data
-X_train, X_test, y_train, y_test = train_test_split(data[features], data[target], test_size=0, random_state=30)
-print(X_test)
-print(y_test)
+X_train, X_test, y_train, y_test = train_test_split(data[features], data[target], test_size=0.2, random_state=30)
+
 # Initialize models
 models = {
     'Random Forest': RandomForestClassifier(random_state=30),
@@ -36,10 +35,14 @@ models = {
 }
 
 # Train and evaluate models
+
+
 for name, model in models.items():
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
     print(f'{name} Model')
+    print(y_pred)
     print('Accuracy:', accuracy_score(y_test, y_pred))
     print(classification_report(y_test, y_pred))
     print('-' * 60)
+
